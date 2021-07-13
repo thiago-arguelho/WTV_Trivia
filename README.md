@@ -6,6 +6,8 @@
   - O design assim como a informação a mostrar e como mostrar fica ao critério de quem tiver a programar Como fonte de perguntas deve usar-se o serviço externo     https://opentdb.com.  
   - O código deve ser colocado num repositório do github com um readme a explicar como correr o serviço  Bonus: imagem docker do serviço pronta a ser usada Bonus 2: script docker-compose para arranques dos serviços
 
+  - Esta a ser usada a interface ASP.NET Core Identity para Gestão de Roles e Utilizadores
+
 # Setup
  - # MongoDB Database:
   - A base de dados está em MongoDB hospedada no MongoDB Atlas - não serão necessários passos para configuração da base de dados (Caso seja necessário acederem à base de dados posso dar acesso ao meu cluster)
