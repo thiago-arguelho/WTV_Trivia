@@ -1,0 +1,203 @@
+﻿/*body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Roboto Mono", Roboto, sans-serif;
+    font-weight: 400;
+}*/
+
+/* Stage Structure Styles */
+
+#stage {
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+#container {
+    padding: 30px;
+}
+
+#gameContainer h1 {
+    text-align: center;
+    font-size: 54px;
+    padding: 0;
+    color: #fff;
+}
+
+#gameHeader {
+    display: none;
+    padding: 0 20px;
+}
+
+/* Core Game Element Styles */
+#gameChoices {
+    display: none;
+}
+
+.container {
+    padding: 20px;
+}
+
+#gameChoices button {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    line-height: 32px;
+    border-radius: 2px;
+    font-size: 26px;
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: #ff6c45;
+    height: 100%;
+    display: block;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 100px;
+    padding: 12px;
+    font-family: "Roboto Mono", Roboto, sans-serif;
+    font-weight: 400;
+}
+
+    #gameChoices button:hover {
+        box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.26), 0 4px 15px 0 rgba(0, 0, 0, 0.26);
+        background-color: #9fcc48;
+    }
+
+.questions {
+    width: 100%;
+    background-color: #00a6ed;
+    float: left;
+    display: block;
+    margin-right: 2%;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    text-align: center;
+}
+
+    .questions span {
+        color: white;
+        font-size: 26px;
+    }
+
+.item-buttons {
+    background-color: #ff6c45;
+    border-radius: 100px;
+    color: white;
+}
+
+    .item-buttons:hover {
+        background-color: #004085;
+        color: white;
+    }
+
+.loginButtons {
+    background-color: #ff6c45;
+    border-radius: 0 0 30px 30px;
+    color: white;
+    font-size: 25px;
+    padding: 10px;
+    width: 200px;
+    font-weight: bold;
+}
+
+    .loginButtons:hover {
+        color: white;
+    }
+
+#startButton {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    line-height: 32px;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 48px;
+    padding: 30px 0;
+    cursor: pointer;
+    font-family: "Roboto Mono", Roboto, sans-serif;
+    font-weight: 400;
+}
+
+    #startButton:hover {
+        box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.26), 0 4px 15px 0 rgba(0, 0, 0, 0.26);
+        background-color: #004085;
+    }
+
+/* Modal Window Styles */
+#playAgain {
+    padding: 10px;
+    border: none;
+}
+
+#modal_window {
+    position: absolute;
+    top: 90px;
+    border: 1px solid #333;
+    background-color: #0e2d55;
+    width: 340px;
+    z-index: 2000;
+    height: auto;
+    display: none;
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.26);
+}
+
+.modal_message {
+    padding: 10px 20px;
+}
+
+    .modal_message p {
+        color: #fff;
+    }
+
+    .modal_message h2 {
+        color: #fff;
+    }
+
+    .modal_message span {
+        float: right;
+    }
+
+    .modal_message div button {
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        line-height: 16px;
+        font-size: 18px;
+        width: 130px;
+        outline: none;
+        border: none;
+        display: block;
+        color: #fff;
+        cursor: pointer;
+        text-align: center;
+        min-height: 44px;
+        padding: 6px;
+        font-family: "Roboto Mono", Roboto, sans-serif;
+        font-weight: 400;
+    }
+
+
+    .modal_message span.correct {
+        color: #4caf50;
+    }
+
+    .modal_message span.incorrect {
+        color: #f44336;
+    }
+
+.login-input {
+    border-radius: 0;
+    padding: 25px;
+}
+
+.register {
+    background-color: #00a6ed;
+}
+
+    .register:hover {
+        color: white;
+    }
+
+.logoZone {
+    width: 100px;
+    height: 100px;
+}

@@ -1,0 +1,248 @@
+﻿@using WTV_TriviaGame.Models
+
+@{
+    ViewData["Title"] = "Index";
+    Trivia TriviaData = (Trivia)TempData["Trivia"];
+}
+
+<script>
+    function GameSetup() {
+
+        var vm = new Vue({
+            data:
+            {
+                startButton: document.querySelector('#startButton'),
+                title: document.querySelector('#title'),
+                questionTitle: document.getElementsByClassName("questions"),
+                gameChoices: document.querySelector('#gameChoices'),
+                gameHeader: document.querySelector('#gameHeader'),
+                buttonOne: document.querySelector('#buttonOne'),
+                buttonTwo: document.querySelector('#buttonTwo'),
+                buttonThree: document.querySelector('#buttonThree'),
+                buttonFour: document.querySelector('#buttonFour'),
+                buttonArray: [document.querySelector('#buttonOne'), document.querySelector('#buttonTwo'), document.querySelector('#buttonThree'), document.querySelector('#buttonFour')],
+                modal_window: document.querySelector("#modal_window"),
+                startAnimation: new TimelineMax({ repeat: 0 }),
+                gameIndex: 0,
+                actualScore: 0,
+                runningGameAgain: false,
+                gameQuestions: [],
+                questions: [], answers: [],
+                correctAnswers: [],
+                gameAnswers: []
+            },
+            methods: {
+                _initilize: function () {
+                    @foreach (TriviaQuestion item in TriviaData.Perguntas)
+                    {
+                        @:var tempArray = [];
+                        @:this.$data.questions.push('@item.Question')
+                        @:this.$data.correctAnswers.push('@item.CorrectAnswer')
+
+                         @foreach (TriviaAnswer answer in item.Answers)
+                         {
+                        @:tempArray.push('@Html.Raw(answer.Value)')
+                        }
+                        @:this.$data.answers.push(tempArray);
+                    }
+                    this.$data.startButton.addEventListener('click', this.startGamePlay, false);
+
+                    for (var i = 0; i < this.$data.buttonArray.length; i++) {
+                        this.$data.buttonArray[i].addEventListener('click', this.anwerClicked, false);
+                    }
+                },
+                startGamePlay: function () {
+
+                    this.generateGameIndexes();
+
+                    this.setupUserInterfaceWithData();
+
+                    this.startAnimation.to([this.$data.startButton, title], 1, { alpha: 0 });
+                    this.startAnimation.to([this.$data.startButton, title], 0.1, { css: { display: 'none' } });
+                    this.startAnimation.to([this.$data.gameHeader, this.$data.gameChoices], 0.1, { css: { display: 'block' } });
+                },
+                runEndOfGame : function () {
+
+                    window_width = window.innerWidth || document.documentElement.clientWidth
+                        || document.body.clientWidth;
+                    var playAgainButton = '<button id="playAgain" class="item-buttons" onClick="window.location.reload()">PLAY AGAIN</button>';
+                    var actualScoreHeader = '<h2>CONGRATS, YOUR FINAL SCORE IS: ' + this.$data.actualScore + '</h2>';
+                    var insertedHTML = actualScoreHeader + playAgainButton ;
+                    this.$data.modal_window.getElementsByTagName('div')[0].innerHTML = insertedHTML;
+                    this.fade_in(1000, this.$data.modal_window, false);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("FinishGame", "Trivia")',
+                        dataType: "html",
+                                data: {
+                                userId: '@TriviaData.UserId',
+                                perguntas: JSON.stringify(this.$data.questions),
+                                points: this.$data.actualScore,
+                            },
+                        success: function (data) {
+                            },
+                        error: function (jqXHR, textStatus) {
+                            }
+                        });
+                },
+                generateGameIndexes: function () {
+                    var breakFlag = false;
+                    while (!breakFlag) {
+                        var randomNumber = Math.floor(Math.random() * vm.$data.questions.length);
+                        if (this.$data.gameQuestions.indexOf(randomNumber) == -1) {
+                            this.$data.gameQuestions.push(randomNumber);
+                            this.$data.gameAnswers.push(this.$data.correctAnswers[randomNumber]);
+                        }
+                        if (this.$data.gameQuestions.length == vm.$data.questions.length) {
+                            breakFlag = true;
+                        }
+                    }
+                },
+                setupUserInterfaceWithData : function () {
+
+                    var ques = this.$data.questions[this.$data.gameQuestions[this.$data.gameIndex]];
+                    var t = this.$data.questionTitle[0].getElementsByTagName('span');
+                    t[0].innerHTML = this.htmlDecode(ques);
+
+                    var ans = this.$data.answers[this.$data.gameQuestions[this.$data.gameIndex]];
+                    for (var i = 0; i < ans.length; i++) {
+                        var a = ans[i];
+                        this.$data.buttonArray[i].textContent = this.htmlDecode(a);
+                    }
+                },
+                anwerClicked : function (e) {
+
+
+                    var UserAnswer = e.target.textContent;
+
+                    var actualCorrectAnswerIndex = this.$data.gameAnswers[this.$data.gameIndex];
+
+                    if (actualCorrectAnswerIndex == UserAnswer) {
+                        vm.$data.actualScore += 10;
+                        cancelButtons = true;
+                        this.dispatch_modal('YOUR ANSWER IS: <span class="correct">CORRECT!</span>', 1000);
+
+                    } else {
+                        cancelButtons = true;
+                        this.dispatch_modal('YOUR ANSWER IS: <span class="incorrect">INCORRECT!</span>', 1000);
+                    }
+                },
+                dispatch_modal : function (message, time) {
+                    this.$data.window_width = window.innerWidth || document.documentElement.clientWidth
+                        || document.body.clientWidth;
+
+                    this.$data.modal_window.getElementsByTagName('p')[0].innerHTML = message;
+
+                    this.fade_in(time, this.$data.modal_window, true);
+                },
+                fade_in : function (time, elem, flag) {
+
+                    var opacity = 0;
+                    this.$data.interval = 50;
+                    gap = this.$data.interval / time;
+
+                    elem.style.display = 'block';
+                    elem.style.opacity = opacity;
+
+                    function func() {
+                        opacity += gap;
+                        elem.style.opacity = opacity;
+
+                        if (opacity >= 1) {
+                            window.clearInterval(fading);
+
+                            if (flag) {
+                                setTimeout(function () {
+                                    vm.fade_out(time, elem);
+                                }, 1500);
+                            }
+                        }
+                    }
+                    var fading = window.setInterval(func, this.$data.interval);
+                },
+                fade_out : function (time, elem) {
+                    var opacity = 1;
+                    this.$data.interval = 50;
+                    var gap = this.$data.interval / time;
+
+                    function func() {
+                        opacity -= gap;
+                        elem.style.opacity = opacity;
+
+                        if (opacity <= 0) {
+                            window.clearInterval(fading);
+                            elem.style.display = 'none';
+                            vm.$data.gameIndex++;
+
+                            if (vm.$data.gameIndex != vm.$data.gameQuestions.length) {
+                                vm.setupUserInterfaceWithData();
+
+                            } else {
+                                vm.runEndOfGame();
+                            }
+                        }
+                    }
+                    var fading = window.setInterval(func, this.$data.interval);
+                },
+                l : function (message) {
+                    console.log(message);
+                },
+                htmlDecode(input) {
+                     var doc = new DOMParser().parseFromString(input, "text/html");
+                     return doc.documentElement.textContent;
+                }
+            }
+        });
+
+
+
+
+        vm._initilize();
+    }
+
+    interval = setInterval(function () {
+        if (document.readyState === 'complete') {
+            clearInterval(interval);
+            var pipe = GameSetup();
+
+            window.onresize = function (event) {
+                var pipe = GameSetup()
+            };
+        }
+    }, 100);
+</script>
+<div id="stage">
+    <div id="container">
+        <div id="gameContainer">
+            <div id="gameHeader">
+                <div class="questions">
+                    <div class="container"><span></span></div>
+                </div>
+            </div>
+            <div id="gameChoices">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="container"><button id="buttonOne" data-index="0"></button></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="container"><button id="buttonTwo" data-index="1"></button></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="container"><button id="buttonThree" data-index="2"></button></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="container"><button id="buttonFour" data-index="3"></button></div>
+                    </div>
+                </div>
+            </div>
+            <h1 id="title">WEB TRIVIA GAME</h1>
+        </div>
+        <button id="startButton" class="item-buttons">START</button>
+    </div>
+</div>
+<div id="modal_window" style="left: 25%; width: 50%; opacity: 1;">
+    <div class="modal_message">
+        <p></p>
+    </div>
+</div>
