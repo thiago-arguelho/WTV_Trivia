@@ -9,7 +9,7 @@
 # Setup
  - # MongoDB Database:
   - A base de dados está em MongoDB hospedada no MongoDB Atlas - não serão necessários passos para configuração da base de dados (Caso seja necessário acederem à base de dados posso dar acesso ao meu cluster)
-  - Se necessário configurarem uma base de dados local basta irem ao ficheiro do projecto "WTV_TriviaGame/appsettings.json" e alterarem o valor indicado na key, "MongoConnnectionString" o Nome da Base de dados deve ser "TriviaDB"
+  - Se necessário configurarem uma base de dados local basta irem ao ficheiro do projecto "WTV_TriviaGame/appsettings.json" e alterarem o valor indicado na key, "MongoConnnectionString" para a ConnectionString do server utilizado o Nome da Base de dados deve ser "TriviaDB"
 
  - # MongoDB DataStructure
     - Nome da DB: TriviaDB
